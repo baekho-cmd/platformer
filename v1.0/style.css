@@ -1,0 +1,49 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #1e1e26; color: #ddd; font-family: system-ui, sans-serif; }
+#game-wrap { display:flex; justify-content:center; align-items:center; min-height:100vh; }
+canvas { background: #1c1c2a; border: 4px solid #111; display:block; }
+#hud { position: absolute; top: 12px; left: 12px; color: #e6e6e6; font-size:14px; }
+.menu-btn {
+  display: none;
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(30,30,50,0.85);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 50;
+}
+
+.menu-btn:hover {
+  background: rgba(60,60,90,0.9);
+}
+
+/* Main menu styles */
+.menu { position: fixed; inset: 0; display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(10,10,20,0.75), rgba(10,10,20,0.9)); z-index: 40; }
+.menu-content { text-align:center; color:#fff; padding:28px 36px; border-radius:12px; backdrop-filter: blur(6px); box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
+.title { font-size:56px; line-height:0.9; margin:0; font-weight:800; letter-spacing: -2px; color: #ffd27a; text-shadow: 0 6px 30px rgba(255,160,40,0.12); }
+.title span{ color:#fff; font-size:36px; display:block; opacity:0.9 }
+.subtitle{ color:#e6e6e6; margin:10px 0 18px }
+.menu-controls{ display:flex; gap:12px; align-items:center; justify-content:center }
+.menu-controls select, .menu-controls button{ padding:8px 14px; border-radius:8px; border: none; font-size:16px }
+.menu-controls button{ background: linear-gradient(90deg,#ff9f43,#ff6b6b); color:#111; font-weight:700; cursor:pointer }
+.menu-foot{ margin-top:12px; color:#cfcfcf }
+.sound-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #eee;
+}
+.sound-toggle input {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+@media (max-width:700px){ .title{ font-size:40px } .menu-content{ padding:18px } }

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Platformer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <button id="menuBtn" class="menu-btn">☰</button>
+  <div id="game-wrap">
+    <canvas id="game" width="900" height="600"></canvas>
+    <div id="timer">00.00.000</div>
+    <div id="hud">
+      <div id="info"></div>
+    </div>
+  </div>
+  <div id="mobileNotice" class="mobile-notice" style="display:none">모바일 터치 컨트롤 사용 가능 — 스테이지 선택 후 Start를 눌러주세요.</div>
+
+  <div id="mobileControls" class="mobile-controls" style="display:none" aria-hidden="true">
+    <div class="mc-left">
+      <button id="touch-left" class="touch-btn" aria-label="left">◀</button>
+      <button id="touch-right" class="touch-btn" aria-label="right">▶</button>
+    </div>
+    <div class="mc-right">
+      <button id="touch-jump" class="touch-btn action" aria-label="jump">⭡</button>
+      <button id="touch-dash" class="touch-btn action" aria-label="dash">⭢⭢</button>
+      <button id="touch-reset" class="touch-btn small" aria-label="reset">🗘</button>
+    </div>
+  </div>
+  <div id="menu" class="menu">
+    <div class="menu-content">
+      <h1 class="title"><span>Platformer</span></h1>
+      <p class="subtitle">간단하지만 중독성 있는 플렛포머</p>
+      <div class="menu-controls">
+        <label>Stage:
+          <select id="stageSelect">
+            <!-- Generate up to 30 stages -->
+            <script>
+              for(let i=0;i<30;i++){
+                document.write(`<option value="${i}">Stage ${i+1}</option>`);
+              }
+            </script>
+          </select>
+        </label>
+        <button id="startBtn">Start</button>
+      </div>
+      <div class="menu-foot">조작: A/D 이동 • Space/W 점프 • Shift 대시 • R 리셋</div>
+      <label class="sound-toggle"><input type="checkbox" id="soundToggle" checked>Sound</label>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
