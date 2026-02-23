@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>404</title>
+
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #1E1E26;
+  font-family: Arial, sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+.text {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  line-height: 1.6;
+  z-index: 10;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 48px;
+  color: #888888;
+}
+
+a {
+  color: #E37A2A;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.game {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60%;
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: #50C878;
+}
+
+.player {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #E37A2A;
+  left: 150px;
+  bottom: 40px;
+}
+
+.platform {
+  position: absolute;
+  width: 120px;
+  height: 20px;
+  background: #50C878;
+}
+
+.spike {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: #D94B4B;
+  bottom: 40px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="text">
+  <h1>404!</h1>
+  <p>You discovered a hidden area...</p>
+  <p>But there is nothing here.</p>
+  <p>
+    Go to <a href="#">this</a> page
+    and give the developer some motivation!
+  </p>
+</div>
+
+<div class="game" id="game">
+  <div class="ground"></div>
+  <div class="player" id="player"></div>
+</div>
+
+<script>
+const game = document.getElementById("game");
+const player = document.getElementById("player");
+
+const GAME_WIDTH = document.documentElement.clientWidth;
+
+let gravity = 0.8;
+let velocityY = 0;
+let playerY = 40;
+let isJumping = false;
+let speed = 3;
+
+let spikes = [];
+let platforms = [];
+
+const PLAYER_LEFT = 150;
+const PLAYER_WIDTH = 40;
+const PLAYER_HEIGHT = 40;
+
+/* 생성 함수 */
+function createPlatform(x) {
+  const el = document.createElement("div");
+  el.className = "platform";
+
+  const bottom = 160 + Math.random() * 120;
+
+  el.style.left = x + "px";
+  el.style.bottom = bottom + "px";
+
+  game.appendChild(el);
+
+  platforms.push({ el, x, bottom });
+}
+
+function createSpike(x) {
+  const el = document.createElement("div");
+  el.className = "spike";
+  el.style.left = x + "px";
+
+  game.appendChild(el);
+
+  spikes.push({ el, x });
+}
+
+/* 초기 생성 */
+for (let i = 0; i < 3; i++) {
+  createPlatform(500 + i * 300);
+  createSpike(700 + i * 500);
+}
+
+function jump() {
+  if (!isJumping) {
+    velocityY = 14;
+    isJumping = true;
+  }
+}
+
+function resetPlayer() {
+  playerY = 40;
+  velocityY = 0;
+  isJumping = false;
+}
+
+function update() {
+
+  velocityY -= gravity;
+  playerY += velocityY;
+
+  if (playerY <= 40) {
+    playerY = 40;
+    velocityY = 0;
+    isJumping = false;
+  }
+
+  platforms.forEach((p, i) => {
+    p.x -= speed;
+    p.el.style.left = p.x + "px";
+
+    if (p.x < -200) {
+      p.el.remove();
+      platforms.splice(i, 1);
+      createPlatform(GAME_WIDTH + 400);
+    }
+
+    const playerRight = PLAYER_LEFT + PLAYER_WIDTH;
+    const playerBottom = playerY;
+    const platformTop = p.bottom + 20;
+
+    const horizontal =
+      playerRight > p.x &&
+      PLAYER_LEFT < p.x + 120;
+
+    const landing =
+      velocityY <= 0 &&
+      playerBottom <= platformTop &&
+      playerBottom >= platformTop - 15;
+
+    if (horizontal && landing) {
+      playerY = platformTop;
+      velocityY = 0;
+      isJumping = false;
+    }
+  });
+
+  spikes.forEach((s, i) => {
+    s.x -= speed;
+    s.el.style.left = s.x + "px";
+
+    if (s.x < -50) {
+      s.el.remove();
+      spikes.splice(i, 1);
+      createSpike(GAME_WIDTH + 400);
+    }
+
+    const playerRight = PLAYER_LEFT + PLAYER_WIDTH;
+    const spikeRight = s.x + 30;
+
+    if (
+      playerRight > s.x &&
+      PLAYER_LEFT < spikeRight &&
+      playerY < 70
+    ) {
+      resetPlayer();
+    }
+
+    const distance = s.x - playerRight;
+    if (distance < 18 && distance > 0 && !isJumping) {
+      jump();
+    }
+  });
+
+  player.style.bottom = playerY + "px";
+
+  requestAnimationFrame(update);
+}
+
+update();
+</script>
+
+</body>
+</html>
